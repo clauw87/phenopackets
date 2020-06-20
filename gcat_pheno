@@ -1,0 +1,277 @@
+// Message Individual
+
+   Individual: { 
+    	subjectId: "e00251512591921"
+    	sex: FEMALE
+    	dateOfBirth: "1973-08-05T00:00:00Z"
+    	}
+
+
+
+// Message PhenopacketSet
+// Timecourse for each Patient is built as a set of phenopackets.    
+
+
+    PhenopacketSet {
+// This is a phenopacket set including 4 phenopackets describing 4 encounters (including 1 survey and 3 medical visits) of 1 subject
+
+
+    subjectId: "e00251512591921"
+
+
+		// (1/1) One message phenopacket at survey time
+		
+		Phenopacket {	
+
+		phenopacketId: "EGAP0000000001"
+		subjectId: "e00251512591921"
+		ageAtEncounter: UNKNOWN
+		timestamp: UNKNOWN
+
+
+    	Exposures: {
+
+    	-	type 
+    			label: "physical actvity"
+    			id: "NCIT:C17708"
+    		evidence: 
+    			label: "survey"
+    			id: "NCIT:C17176"
+    		negated: false  
+    		quantity: 
+    				units: "MET" 
+    				value: 121.26
+    		frequency: 
+    			label: "weekly"
+    			id: "NCIT:C67069"
+    	-   type:
+    			label: "inactivity"
+    			id: "NCIT:C118254"
+    		evidence:
+    				label: "survey"
+    				id: "NCIT:C17176"
+    		negated: false
+    		quantity:
+    				unit: "hours"
+    				value: 9
+    		frequency: 
+    				label: "weekly"
+    				id: "NCIT:C67069"
+   		-	type: 
+    			label: "alcohol consumption"
+    			id: "NCIT:C16273"
+    		evidence: 
+    				label: "survey"
+    				id: "NCIT:C17176"
+    		negated: false
+    		\\ category over limit
+    		quantity:  
+    				unit: "UBE"
+    				value: 	23  
+    				frequency: "weekly"
+    				\\category: 1	  
+    		quantity:  
+    				unit: "who score"
+    				value: 2	  
+    		quantity:
+    				unit: "epic score"
+    				value: 4
+    	-	type:
+    			label: "mediterranean diet"
+    			id: "OMIT:0022848"
+    			evidence:
+    					label: "survey"
+    					id: "NCIT:C17176"
+    		negated: false
+    		quantity: 
+    				unit: "predimed score"
+    				value: 8				
+    	-	type:
+    			label: "smoking"
+    			id: "NCIT:C154329" //"SCDO:0001079"
+    		evidence 
+    				label: "survey"
+    				id: "NCIT:C17176"
+    		negated: false
+    		\\ smoking status: 1
+    		modifier: 
+    				label: "former smoker"
+    				id: "NCIT:C67148"
+  		  	ageOfOnset: P18Y
+  		  	quantity 
+  		  			units: "packs"
+  		  			value: 0.35
+  		  			frequency: 
+  		  					label: "daily"
+  		  					id: "NCIT:C25473"
+  		  	quantity: 
+  		  			units: "smoking fagerstrom score"
+  		  			value: NA
+  		  	quantity: 
+  		  			units: "smoking intensity"
+  		  			value: 8
+  		  			
+  		  	ocurrence:
+  		  			interval: 
+  		  					start: "1991-08-05T00:00:00Z"
+  		  					end: "2004-08-05T00:00:00Z"
+  	
+	 	
+    }
+}
+
+
+		// (1/3) One message phenopacket corresponding to one medical encounter    	
+    	
+    	Phenopaket {
+
+
+		phenopacketId: "EGAP0000000002"
+		subjectId: "e00251512591921"
+		ageAtEncounter: 39
+		timestamp: "2012-10-02T00:00:00Z"
+
+		
+		Diagnoses: 
+        -	code: 
+            	 id: "ICD9:5693"
+            	 label: "Hemorrage of rectum and anus"
+        	
+			ageAtOnset:
+            			age: 39
+            medical_unit: // custom message, needs definition in metadata
+            			CMBDORIGIN: AP
+            			code: 3527
+            			name: "EAP Tarragona 4 - Llevant"
+    }	
+	
+
+
+
+
+
+		// (2/3) One mesaage phenopacket corresponding to one medical encounter    	
+    	
+    	Phenopaket {
+
+
+		phenopacketId: "EGAP0000000003"
+		subjectId: "e00251512591921"
+		ageAtEncounter: 40
+		timestamp: "2013-09-10T00:00:00Z"
+
+		
+		Diagnoses: 
+        -	code: 
+            	 id: "ICD9:6101"
+            	 label: "Diffuse cystic mastopathy"
+        	ageAtOnset:
+            			age: 40
+            medical_unit: // custom message, needs definition in metadata
+            			CMBDORIGIN: AP
+            			code: 3527
+            			name: "EAP Tarragona 4 - Llevant"
+    }	
+
+
+
+
+
+
+
+		// (3/3) One mesaage phenopacket corresponding to one medical encounter    	
+    	
+    	Phenopaket {
+
+
+		phenopacketId: "EGAP0000000004"
+		subjectId: "e00251512591921"
+		ageAtEncounter: 42
+		timestamp: "2016-07-24T00:00:00Z"
+
+		
+		Diagnoses: 
+        -	code: 
+            	 id: "ICD9:7336"
+            	 label: "Tietze's disease"
+        	
+			ageAtOnset:
+            			age: 42
+            medical_unit: // custom message, needs definition in metadata
+            			CMBDORIGIN: AP
+            			code: 3527
+            			name: "EAP Tarragona 4 - Llevant"
+		-	code: 
+            	 id: "ICD9:7336"
+            	 label: "Tietze's disease"
+        	
+			ageAtOnset:
+            			age: 42
+           	medical_unit:
+            			type: URG
+            			code: 767
+            			name: "Hospital Sant Pau i Santa Tecla"      
+        Procedures:
+		- 	type:
+    			id: "OAE:0004232"
+    			label: "physical examination"
+    		medical_unit: // custom message, needs definition in metadata
+            			type: URG
+            			code: 767
+            			name: "Hospital Sant Pau i Santa Tecla"      
+    		
+
+    }	
+
+
+
+\\ Metadata message for all PhenopacketSet
+
+MetaData {
+created: "2020-06-01T00:00:00Z"
+created_by: "EGA"
+submitted_by: "GCAT"
+resources: 
+		HPO: 
+		ECO: 
+		ECTO: http://purl.obolibrary.org/obo/ecto.owl
+		NCIT: 
+		OMIT:
+		ICD9: https://icd.codes/icd9cm
+		epic_score: https://www.sciencedirect.com/science/article/pii/S1553725019301011
+		pedimed_score: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3419206/
+
+		measurement units:
+		- MET: (NCIT:C89729) https://www.who.int/dietphysicalactivity/physical_activity_intensity/en/#:~:text=Metabolic%20Equivalents%20(METs)%20are%20commonly,of%201kcal%2Fkg%2Fhour.
+
+		- UBE (= 10 gr ethanol) :https://www.niaaa.nih.gov/
+		https://www.euskadi.eus/contenidos/informacion/alcohol_consumo_responsable/es_def/adjuntos/CALCULO%20DEL%20CONSUMO%20DE%20ALCOHOL%20Y%20CONCEPTO%20DE%20UNIDAD%20DE%20BEBIDA%20ESTANDAR.pdf
+		
+		medical unit codes:	AP, URG (dictionary)
+
+
+phenopacket_schema_version: org.phenopackets.schema.v1
+external_references: 
+					- GCAT project webpage: 
+
+}
+
+
+
+\\ Sequence files for Individual of this PhenocpaketSet
+HtsFile {
+        CRAM: "EGAFXXXXXXXXXXXXX1"
+        VCF: "EGAFXXXXXXXXXXXXX2"
+        FASTQ: "EGAFXXXXXXXXXXXXX3"
+    }
+
+
+
+
+}
+
+
+
+
+
+
