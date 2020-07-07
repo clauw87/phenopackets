@@ -1,0 +1,280 @@
+syntax = "proto3";
+package org.matchmakerexchange.api.v1;
+
+import "base.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "GCAT";
+option java_package = "org.gcat.api.v1";
+
+// This is an example of GCAT phenopacket schema definition that reuses Phenopacket schema common elements and defines some custom resource-specific messages to be used across datasets from GCAT project 
+
+
+
+
+message EncountersSet {  
+// after TimeCourse now deprecated as message in base
+    string id = 1
+    string description = 2
+    org.phenopackets.schema.v1.core.Individual subject = 3
+    //repeated org.phenopackets.schema.v1.core.Phenopacket encounters = 4
+    repeated Encounter encounters = 4
+    org.phenopakets.schema.v1.core.MetaData metadata = 5 
+}
+  
+
+
+
+
+
+message Individual {
+    string id = 1;
+    \\repeated string alternate_ids = 2;
+    google.protobuf.Timestamp date_of_birth = 3;
+    \\Age age_at_collection = 4;
+    Sex sex = 6;
+    \\KaryotypicSex karyotypic_sex = 7;
+    \\OntologyClass taxonomy = 8;
+}
+
+
+message Phenopacket {
+    string id = 1;
+    string type = 2;
+    \\org.phenopackets.schema.v1.core.Individual subject = 2;
+    \\repeated org.phenopackets.schema.v1.core.PhenotypicFeature phenotypic_features = 3;
+    \\repeated org.phenopackets.schema.v1.core.Biosample biosamples = 4;
+    \\repeated org.phenopackets.schema.v1.core.Gene genes = 5;
+    \\repeated org.phenopackets.schema.v1.core.Variant variants = 6;
+    repeated org.phenopackets.schema.v1.core.Disease diseases = 7;
+    repeated org.phenopackets.schema.v1.core.HtsFile hts_files = 8;
+    org.phenopackets.schema.v1.core.MetaData meta_data = 9;
+
+
+
+
+message Age {
+    // The :ref:`ISO 8601<metadata_date_time>` age of this object as ISO8601
+    string age = 1;
+}
+
+message TimeElement {
+    oneof element {
+    Age age = 1;
+    AgeRange age_range = 2;
+    OntologyClass ontology_class = 3;
+    google.protobuf.Timestamp timestamp = 4;
+    Interval interval = 5;
+    }
+}
+
+
+message PhenotypicFeature {
+    string description = 1;
+    OntologyClass type = 2;
+    bool negated = 3;
+    OntologyClass severity = 4;
+    repeated OntologyClass modifiers = 5;
+    //oneof onset {
+    //    Age age_of_onset = 6;
+    //    AgeRange age_range_of_onset = 7;
+    //    OntologyClass class_of_onset = 9;
+    //}
+    repeated Evidence evidence = 10;
+}
+
+
+
+message Disease {
+    OntologyClass term = 1;
+    oneof onset {
+        //Age age_of_onset = 2;
+        //AgeRange age_range_of_onset = 3;
+        //OntologyClass class_of_onset = 4;
+    }
+    //repeated OntologyClass disease_stage = 5;
+    //repeated OntologyClass tnm_finding = 6;
+
+}
+
+
+message Diagnose {   
+// based on Disease but wo age (which is already in Encounter message and with code of medical unit where diagnose was given) 
+    OntologyClass term = 1;
+    Origin origin = 2;
+}
+
+
+message Origin {
+    string type = 1;
+    string code =2;
+    string name = 3;
+}
+
+
+
+message Exposure {
+    string description = 1;
+    OntologyClass type = 2;
+    bool negated = 3;
+    OntologyClass severity = 4;
+    repeated OntologyClass modifiers = 5;
+    oneof start {
+        Age age_at_start = 6;
+        AgeRange age_range_at_start = 7;
+        OntologyClass class_at_start = 9;
+        google.protobuf.Timestamp time_at_start = 11;
+    }
+    oneof end {
+        Age age_at_end = 12;
+        AgeRange age_range_at_end = 13;
+        OntologyClass class_at_end = 14;
+        }
+    repeated Evidence evidence = 10;
+}
+
+
+message ExposureExtended {
+    Exposure exposure = 1;
+    Quantity quantity = 2;
+    OntologyClass frequency = 3;
+    TimeElement exposure_time = 4;
+
+
+}
+
+
+message Evidence {
+    OntologyClass evidence_code = 1;
+    ExternalReference reference = 2;
+}
+
+
+
+
+
+
+
+
+
+
+\\ New messages v1.1
+
+
+message DoseInterval {
+    Quantity quantity = 1;
+    Interval interval = 2; 
+    }
+
+message Quantity {
+    OntologyClass unit = 1;
+    double value = 2;
+}
+
+
+
+message MedicalAction {
+    oneof action {
+        PharmaceuticalTreatment pharmaceutical_treatment = 1;
+        Procedure procedure = 2;
+    }
+}
+
+
+message PharmaceuticalTreatment {
+    OntologyClass drug = 1;
+    OntologyClass route_of_administration = 2; 
+    repeated DoseInterval dose_intervals = 3;
+    DrugType drug_type = 4;
+    \\StopReason stop_reason_id = 5;
+}
+
+
+enum DrugType {
+    UNKNOWN_DRUG_TYPE = 0;
+    PRESCRIPTION = 1;
+    EHR_MEDICATION_LIST = 2;
+    ADMINISTRATION_RELATED_TO_PROCEDURE = 3;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+\\ Private messages
+
+
+
+
+\\Encounter {
+ \\   org.phenopackets.schema.v1.core.Phenopacket
+   \\ Age age_at_encounter = 2;
+}
+
+message Encounter { 
+// after Phenopacket message
+    string id = 1;
+    repeated org.phenopackets.schema.v1.core.Age age_at_encounter = 2;
+    google.protobuf.Timestamp encounter_time = 3;
+    \\org.phenopackets.schema.v1.core.TimeElement encounter_time = 4;
+    repeated Finding findings = 3;
+    repeated org.phenopackets.schema.v1.core.Disease diseases = 7;
+    repeated org.phenopackets.schema.v1.core.HtsFile hts_files = 8;
+}
+
+
+
+
+Finding {
+    one of {
+        repeated Measurement = 1;
+        repeated ClinicalFinding = 2;
+        repeated ExposureExtended = 3;
+        repeated Score = 4;
+        repeated Category = 5;
+    }
+}
+
+
+message Score {
+    string description = 1;
+    OntologyClass type = 2;
+    double value = 3;
+}
+
+
+message Category {
+    string description = 1;
+    OntologyClass type = 1;
+    OntologyClass classification = 2;
+}
+
+
+Measurement {
+    OntologyClass type = 1;
+    Quantity quantity = 2;
+}
+
+
+ClinicalFinding {
+    //after phenotypicfeature, but with no time, which is in Encounter message
+    string description = 1;
+    OntologyClass type = 2;
+    bool negated = 3;
+    OntologyClass severity = 4;
+    repeated OntologyClass modifiers = 5;
+    repeated Evidence evidence = 6 
+}
+
+
+
+
+
