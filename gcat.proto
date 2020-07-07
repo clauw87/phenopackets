@@ -7,84 +7,135 @@ option java_multiple_files = true;
 option java_outer_classname = "GCAT";
 option java_package = "org.gcat.api.v1";
 
-// This is an example of how GCAT can define their own custom messages using the
-// Phenopackets schema to define common elements, such as OntologyClass, Disease, Phenotypic Features and Individual. Other
-// resource-specific types require specifying in their own schema definition, as is shown in this file.
+// This is an example of GCAT phenopacket schema definition that reuses Phenopacket schema common elements and defines some custom resource-specific messages to be used across datasets from GCAT project 
 
 
 
-message TimeCourse {
+
+message EncountersSet {  
+// after TimeCourse now deprecated as message in base.proto
     string id = 1
     string description = 2
     org.phenopackets.schema.v1.core.Individual subject = 3
-    repeated org.phenopackets.schema.v1.core.Phenopacket encounters = 4
+    //repeated org.phenopackets.schema.v1.core.Phenopacket encounters = 4
+    repeated Encounter encounters = 4
     org.phenopakets.schema.v1.core.MetaData metadata = 5 
 }
-  
+ 
 
 
-message Encounter {
+
+message Encounter { 
+// after Phenopacket message
     string id = 1;
-    string type = 2;
-    \\org.phenopackets.schema.v1.core.Individual subject = 2;
-    \\repeated org.phenopackets.schema.v1.core.PhenotypicFeature phenotypic_features = 3;
-    \\repeated org.phenopackets.schema.v1.core.Biosample biosamples = 4;
-    \\repeated org.phenopackets.schema.v1.core.Gene genes = 5;
-    \\repeated org.phenopackets.schema.v1.core.Variant variants = 6;
-    repeated org.phenopackets.schema.v1.core.Disease diseases = 7;
+    repeated Age age_at_encounter = 2;
+    google.protobuf.Timestamp encounter_time = 3;
+    \\TimeElement encounter_time = 4;
+    repeated Finding findings = 5;
+    repeated Diagnose diagnoses = 6;
+    repeated ExposureExtended exposures = 7;
     repeated org.phenopackets.schema.v1.core.HtsFile hts_files = 8;
-    org.phenopackets.schema.v1.core.MetaData meta_data = 9;
+    org.phenopackets.schema.v1.core.MetaData meta_data = 9
 }
 
 
 
-message Subject {
-    string id = 1;
-    \\repeated string alternate_ids = 2;
-    google.protobuf.Timestamp date_of_birth = 3;
-    \\Age age_at_collection = 4;
-    Sex sex = 6;
-    \\KaryotypicSex karyotypic_sex = 7;
-    \\OntologyClass taxonomy = 8;
+
+
+
+
+message Diagnose {   
+// based on Disease but includes also an Origin class to describe the medical unit where diagnose was given
+    org.phenopackets.schema.v1.core.Disease disease = 1;
+    Origin origin = 2;
 }
 
 
 
-message Exposure {
-    string description 1;
+message Finding {
+    one of {
+        repeated ClinicalFinding = 2;
+        repeated ExposureExtended = 3;
+        repeated Measurement = 1;
+        repeated Score = 4;
+        repeated Category = 5;
+    }
+}
+
+
+
+message Origin {
+    string type = 1;
+    string code =2;
+    string name = 3;
+}
+
+
+
+message ClinicalFinding {
+    PhenotypicFeature clinical_finding = 1;
+    Origin origin = 2;
+}
+
+
+
+
+message ExposureExtended {
+    Exposure exposure = 1;
+    Quantity quantity = 2;
+    OntologyClass frequency = 3;
+    TimeElement exposure_time = 4;
+
+
+}
+
+
+
+
+message Measurement {
+    OntologyClass type = 1;
+    Quantity quantity = 2;
+    Origin origin = 3;
+}
+
+
+
+message Category {
+    string description = 1;
+    OntologyClass type = 1;
+    OntologyClass classification = 2;
+}
+
+
+
+message Score { // a type of measurement ?
+    string description = 1;
     OntologyClass type = 2;
-    bool negated = 3;
-    OntologyClass severity = 4
-    OntologyClass modifiers = 5
-    Age start = 6;
-    Age end = 7; 
-    repeated evidence = 8;
+    double value = 3;
+}
+
+
+
+message Medication {
+    PharmaceuticalTreatment medications = 1; 
+    OntologyClass frequency = 2;
+}
+
+
+
+message ProcedureExtended {
+    Procedure procedure = 1;
+    Origin origin = 2;
 }
 
 
 
 
-message Evidence {
-    string disclaimer = 1;
-    string terms = 2;
-}
 
 
 
 
 
-message GCATcodiup {
-    string name = 1;
-    string institution = 2;
-    string href = 3;
-    string email = 4;
-}
-
-
-message MmeMatch {
-    float score = 1;
-    MmePatient patient = 2;
-}
 
 
 

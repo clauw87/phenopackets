@@ -229,13 +229,14 @@ Findings:
 		encounterTime: 2012-10-02T00:00:00Z
 
 		
-		Diagnoses: 
+		 Clinical Findings: 
+
         -	term: 
-            	 id: ICD9:5693
+            	 id: NCIT:C34681  //  ICD9:5693 
             	 label: Hemorrhage of rectum and anus
            origin:
         		type: AP
-        		code:	767
+        		code: 3527
         		name: EAP Tarragona 4 - Llevant
     }	
 		
@@ -268,8 +269,6 @@ Findings:
 
 
 
-
-
 		// One message phenopacket corresponding to one medical encounter    	
     	
     	Phenopaket {
@@ -282,29 +281,35 @@ Findings:
 
 		
 		Diagnoses: 
-        -	code: 
+
+        	term: 
             	 id: ICD9:7336
             	 label: Tietze's disease
      		origin:
 				type: URG
-        		code:	767
+        		code: 767
         		name: Hospital Sant Pau i Santa Tecla
- 		   
-		-	code: 
+
+			term: 
             	 id: ICD9:7336
             	 label: Tietze's disease
          	origin:	
          		type: AP
-        		code:	767
+        		code: 3527
         		name: EAP Tarragona 4 - Llevant
     
 
 		Medical Actions:       
 
-            Procedures:
-				- 	type:
-    					id: ICD-9 code:897 // OAE:0004232 
+            Procedure:
+					type:
+    					id: ICD-9-PCS code:897 // OAE:0004232 
     					label: general physical examination
+    				origin:	
+        		 		type: URG - Hospital
+        				code: 767
+        				name: Hospital Sant Pau i Santa Tecla   
+    
    
     }	
 
@@ -321,23 +326,26 @@ Findings:
 		ageAtEncounter: 39
 		timestamp: 2012-11-01T00:00:00Z
 
-		Medical Actions:       
-        	Medications:
-        	-   drug type: prescription
-			- 	drug:
+
+		Medical Actions:   
+
+        	Medication:
+
+        	    drug type: prescription
+				drug:
     				id: R06AE07
     				label: Cetirizina
-    		- route of administration: 
+    		    route of administration: 
     						id: C38288
     						label: oral route of administration
-    		- dose interval:
-    				quantity: (FIXME: not sure if DDD refers to this)
+    		    frequency: 
+    					id: NCIT:C25473
+    					label: daily
+    		    dose interval:
+    			     	quantity: (FIXME: not sure if DDD refers to this)
     						units: mg (?FIXME)
     						value: 20
-    				frequency: 
-    						id: NCIT:C25473
-    						label: daily
-    				interval: (FIXME: DDD, NOMBRERECEPTES?)
+        				interval: (FIXME: DDD, NOMBRERECEPTES?)
     						start: 2012-11-01T00:00:00Z
     						end: UNKNOWN
     }	
