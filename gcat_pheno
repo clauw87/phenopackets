@@ -1,98 +1,104 @@
-// Message Individual
+// Timecourse for each Patient is built as a set of phenopacket-like Encounters    
 
-   Subject: { 
-    	subjectId: e00251512591921
+
+
+
+
+EncounterSet {
+// This is a phenopacket set including 4 Encounters (including 1 survey and 3 medical visits and 1 medication record) of 1 subject
+
+	set_id: S0000000000000001
+
+
+
+ 	subject: { 
+    	
+    	subject_id: e00251512591921
     	sex: FEMALE
-    	dateOfBirth: 1973-08-05T00:00:00Z
+    	date_of_birth: 1973-08-05T00:00:00Z
+    	
     	}
 
 
-
-// Message PhenopacketSet
-// Timecourse for each Patient is built as a set of phenopackets.    
-
-
-    PhenopacketSet {
-// This is a phenopacket set including 4 phenopackets describing 4 encounters (including 1 survey and 3 medical visits) of 1 subject
-
-
-    subjectId: e00251512591921
-
-
-		// One message phenopacket at survey time
 		
-		Phenopacket/Encounter {	
-
-		phenopacketId: EGAP0000000001
-		\\subjectId: e00251512591921
-		ageAtEncounter: 41
-		timestamp: 2015-07-13T00:00:00Z 
+		
+	 encounters {	
 
 
-Findings:
-
-	Measurements:
-
-			description: weight
-			type:
-				id: PATO:0000128
-				label: weight
-			quantity:
-				units: kg
-				value:
-
-			description: height
-			type:
-				id: PATO:0000119
-				label: height
-			quantity:
-				units: cm
-				value: 
-
-			description: waist circumference
-			type:
-				id: CMO:0000242
-				label: waist circumference
-			quantity:
-				units: cm
-				value:
-
-			description: hip circumference
-			type:
-				id: CMO:0000014
-				label: hip circumference
-			quantity:
-				units: cm
-				value:
-			score
+// One message Encounter at survey time
+		encounter_id: EGAP0000000001
+		age_at_eoncounter: 41
+		encounter_time: 2015-07-13T00:00:00Z 
 
 
-	Scores:	
+		findings:
+
+			measurements:
+
+					description: weight
+					parameter:
+						id: PATO:0000128
+						label: weight
+					quantity:
+						units: kg
+						value: 55
+
+					description: height
+					parameter:
+						id: PATO:0000119
+						label: height
+					quantity:
+						units: cm
+						value: 166
+
+					description: waist circumference
+					parameter:
+						id: CMO:0000242
+						label: waist circumference
+					quantity:
+						units: cm
+						value: 77
+
+				description: hip circumference
+					parameter:
+						id: CMO:0000014
+						label: hip circumference
+					quantity:
+						units: cm
+						value: 97
+
+
+		 	 scores:	
 // these are derived from other measures, should be removed? 
-			
-			type: 
-				id: CMO: 0000105 //EFO:004340// OMIT:0016586
-				label: body mass index
-			value: 19.96
+					description: BMI
+					type: 
+						id: CMO: 0000105 //EFO:004340// OMIT:0016586
+						label: body mass index
+					value: 19.96
+
+					description: WHR
+		    		type:
+						id: CMO:0000020
+						label: waist to hip ratio (WHR)
+					value: 0.79
 
 
-		    type:
-				id: CMO:0000020
-				label: waist to hip ratio (WHR)
-			value: 0.79
-			class: 	 
-
-
-	Categories:	 
-// these are categorical values based on other measures, to removed? derivable or too home-made?
+			 categories:	 
+// these are categorical values based on other measures or scores, to removed/merged somehow? derivable or too home-made?
 		   
-		   description: BMI WHO classification
-		   type:
-				id:
-				label:   
-			classification:
-						id: 
-						label: normal weight 
+		   			description: BMI WHO classification
+		   			type:
+						id:
+						label:   
+					classification:
+							id: 
+							label: normal weight 
+
+					description: risk of disease
+       				type: 
+    					id: 
+    					label: 
+    				
 
 
 
@@ -104,32 +110,24 @@ Findings:
     		type 
     			id: EFO:0001073
     			label: obesity
-       		negated: false  
+       		negated: true
    			evidence: 
-    			id: NCIT:C17176
-    			label: survey
+    			id: ECO:0000002 //AFRL:0000155
+    			label: direct assay evidence //derived measure 
  	
-       		description: risk of disease
-       		type 
-    			id: 
-    			label: 
-    		negated: false  
-   			evidence: 
-    			id: NCIT:C17176
-    			label: survey
- 			
+       		
 
 
 
     Exposures: 
 
-    	-	description: liftestyle/ as opposed to environmental
+    		description: liftestyle as opposed to environmental
     		type  
     			id: NCIT:C17708
     			label: physical actvity
     		evidence: 
-    			id: NCIT:C17176
-    			label: survey
+    			id: ECO:0006151//NCIT:C17176
+    			label: documented statement evidence//survey
     		negated: false  
     		quantity: 
     				units: MET
@@ -138,13 +136,13 @@ Findings:
     			id: NCIT:C67069
     			label: weekly
     	
-    	-   description: liftestyle
+    	    description: liftestyle
     		type:
     			id: NCIT:C118254
     			label: inactivity
-    		evidence:
-    				id: NCIT:C17176
-    				label: survey
+    		evidence: 
+    				id: ECO:0006151//NCIT:C17176
+    				label: documented statement evidence//survey
     		negated: false
     		quantity:
     				unit: hours
@@ -153,13 +151,13 @@ Findings:
     				label: weekly
     				id: NCIT:C67069
    		
-   		-	description: liftestyle
+   			description: liftestyle
    			type: 
     			label: alcohol consumption
     			id: NCIT:C16273
     		evidence: 
-    				label: survey
-    				id: NCIT:C17176
+    				id: ECO:0006151//NCIT:C17176
+    				label: documented statement evidence//survey
     		negated: false
     		quantity:  
     				unit: gr
@@ -172,25 +170,25 @@ Findings:
     				unit: epic score
     				value: 4
     	
-    	-	description: liftestyle
+    		description: liftestyle
     		type:
     			label: mediterranean diet
     			id: OMIT:0022848
-    			evidence:
-    					label: survey
-    					id: NCIT:C17176
+    			evidence: 
+    				id: ECO:0006151//NCIT:C17176
+    				label: documented statement evidence//survey
     		negated: false
     		quantity: 
     				unit: predimed score
     				value: 8				
     	
-    	-	description: liftestyle
+    		description: liftestyle
     		type:
     			label: smoking
     			id: NCIT:C154329 //SCDO:0001079
-    		evidence 
-    				label: survey
-    				id: NCIT:C17176
+    		evidence: 
+    				id: ECO:0006151//NCIT:C17176
+    				label: documented statement evidence//survey
     		negated: false
     		modifier: (FIXME: duplicated info if interval is used and end date is set)
     				label: former smoker
@@ -213,49 +211,46 @@ Findings:
   		  					start: 1991-08-05T00:00:00Z 
   		  					end: 2004-08-05T00:00:00Z
   	
-}
 
 
 
 
-		// One message phenopacket corresponding to one medical encounter    	
-    	
-    	Phenopacket {
 
 
-		phenopacketId: EGAP0000000002
-		subjectId: e00251512591921
-		ageAtEncounter: 39
-		encounterTime: 2012-10-02T00:00:00Z
+		// One encounter corresponding to one medical encounter    	
+		encounter_id: EGAP0000000002
+		age_at_encounter: 39
+		time_at_encounter: 2012-10-02T00:00:00Z
 
 		
-		 Clinical Findings: 
+		 Findings:
 
-        -	term: 
+
+		 clinical_findings:
+
+
+		 	description: finding at medical vsit
+        	type: 
             	 id: NCIT:C34681  //  ICD9:5693 
             	 label: Hemorrhage of rectum and anus
            origin:
         		type: AP
         		code: 3527
         		name: EAP Tarragona 4 - Llevant
-    }	
-		
+    
 
 
 
-		// One message phenopacket corresponding to one medical encounter    	
-    	
-    	Phenopacket {
+		// One message encounter corresponding to one medical encounter    	
 
-
-		phenopacketId: EGAP0000000003
-		subjectId: e00251512591921
-		ageAtEncounter: 40
-		timestamp: 2013-09-10T00:00:00Z
+		encounter_id: EGAP0000000003
+		age_at_encounter: 40
+		time_at_encounter: 2013-09-10T00:00:00Z
 
 		
 		Diagnoses: 
-        -	term: 
+        
+        	term: 
             	 id: ICD9:6101
             	 label: Diffuse cystic mastopathy
         	origin:
@@ -263,21 +258,15 @@ Findings:
         		code:	767
         		name: Hospital Sant Pau i Santa Tecla
     
-    }	
 
 
 
 
+		// One encounter corresponding to one medical encounter    	
 
-		// One message phenopacket corresponding to one medical encounter    	
-    	
-    	Phenopaket {
-
-
-		phenopacketId: EGAP0000000004
-		subjectId: e00251512591921
-		ageAtEncounter: 42
-		timestamp: 2016-07-24T00:00:00Z
+		encounter_id: EGAP0000000004
+		age_at_encounter: 42
+		time_at_encounter: 2016-07-24T00:00:00Z
 
 		
 		Diagnoses: 
@@ -302,6 +291,7 @@ Findings:
 		Medical Actions:       
 
             Procedure:
+
 					type:
     					id: ICD-9-PCS code:897 // OAE:0004232 
     					label: general physical examination
@@ -311,20 +301,13 @@ Findings:
         				name: Hospital Sant Pau i Santa Tecla   
     
    
-    }	
+ 
 
+		// One encounter corresponding to one pharmacy encounter/record    	
 
-
-
-		// One message phenopacket corresponding to one pharmacy encounter    	
-    	
-    	Phenopacket {
-
-
-		phenopacketId: EGAP0000000005
-		subjectId: e00251512591921
-		ageAtEncounter: 39
-		timestamp: 2012-11-01T00:00:00Z
+		encounter_id: EGAP0000000005
+		age_at_encounter: 39
+		time_at_encounter: 2012-11-01T00:00:00Z
 
 
 		Medical Actions:   
@@ -333,8 +316,8 @@ Findings:
 
         	    drug type: prescription
 				drug:
-    				id: R06AE07
-    				label: Cetirizina
+    				id: R06AE07  // CHEBI:3561
+    				label: Cetirizine
     		    route of administration: 
     						id: C38288
     						label: oral route of administration
@@ -343,85 +326,113 @@ Findings:
     					label: daily
     		    dose interval:
     			     	quantity: (FIXME: not sure if DDD refers to this)
-    						units: mg (?FIXME)
+    						units: mg 
     						value: 20
         				interval: (FIXME: DDD, NOMBRERECEPTES?)
     						start: 2012-11-01T00:00:00Z
     						end: UNKNOWN
-    }	
 
 
 
 
+}
 
-\\ Metadata message for all PhenopacketSet
+// Metadata message for all PhenopacketSet
 
 MetaData {
-created: 2020-06-01T00:00:00Z
-created_by: EGA
-submitted_by: GCAT
-resources: 
-	-	id: hpo 
-		name: Human Phenotype Ontology
-		url: http://purl.obolibrary.org/obo/hp.obo
-		version: 
-		prefix: HP:
-	-	id: eco
-		name:
-		url:
-		prefix: ECO:
-	-   id: ecto
-		name:
-		url: http://purl.obolibrary.org/obo/ecto.owl
-		prefix: ECTO
-	-   id: ncit
-		name:
-		url:
-		prefix: NCIT:
-	- 	id: omit
-		name:
-		url:
-		prefix: OMIT:
-	- 	id: oae
-		name:
-		url:
-		prefix: OAE:
-	- 	id: pato
-		name:
-		url:
-		prefix: PATO:
-	- 	id: cmo
-		name: Clinical Measurements Ontology
-		url:
-		prefix: CMO:
-	-   id: ICD9
-		name:
-		url: https://icd.codes/icd9cm
-		prefix: ICD9:
-	-	id: act
-		name: ACT
-		url: https://www.who.int/medicines/regulation/medicines-safety/toolkit_atc/en/
+	created: 2020-06-01T00:00:00Z
+	created_by: EGA
+	submitted_by: GCAT
+	resources: 
+			
+			id: hpo 
+			name: Human Phenotype Ontology
+			url: http://purl.obolibrary.org/obo/hp.obo
+			version: 
+			prefix: HP:
+			iri_prefix: http://purl.obolibrary.org/obo/HP_
+		
+			id: eco
+			name:
+			url:
+			version:
+			prefix: ECO:
+			iri_prefix:
 	
-\\non-IS measurement units:
-\\	-	epic_score: https://www.sciencedirect.com/science/article/pii/S1553725019301011
-\\	-   pedimed_score: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3419206/
-\\	-   smoking fagerstrom score: 
-\\	- MET: (NCIT:C89729) https://www.who.int/dietphysicalactivity/physical_activity_intensity/en/#:~:text=Metabolic%20Equivalents%20(METs)%20are%20commonly,of%201kcal%2Fkg%2Fhour.
-\\	- DDD: 
-\\		https://www.who.int/medicines/regulation/medicines-safety/toolkit_atc/en/ 
-\\		here defined as ? 
-	
+			id: ecto
+			name:
+			url: http://purl.obolibrary.org/obo/ecto.owl
+			version:
+			prefix: ECTO
+			iri_prefix:
 
-phenopacket_schema_version: org.phenopackets.schema.v1
-external_references: 
-					- GCAT project webpage: 
+			id: ncit
+			name:
+			url:
+			version
+			prefix: NCIT:
+			iri_prefix:
 
+			id: omit
+			name:
+			url:
+			version:
+			prefix: OMIT:
+			iri_prefix:
+
+			id: oae
+			name:
+			url:
+			version:
+			prefix: OAE:
+			iri_prefix:
+
+			id: pato
+			name:
+			url:
+			version:
+			prefix: PATO:
+			iri_prefix:
+			
+			id: cmo
+			name: Clinical Measurements Ontology
+			url:
+			version:
+			prefix: CMO:
+			iri_prefix:
+			
+			id: ICD9
+			name:
+			url: https://icd.codes/icd9cm
+			version:
+			prefix: ICD9:
+			iri_prefix:
+
+			id: act
+			name: Anatomical Therapeutic Chemical Classification System
+			url: https://www.who.int/medicines/regulation/medicines-safety/toolkit_atc/en/
+			prefix: R
+			iri_prefix:
+
+
+
+	phenopacket_schema_version: org.phenopackets.schema.v1
+	external_references: 
+					GCAT project webpage: 
+
+// non-IS measurement units:
+					epic_score: https://www.sciencedirect.com/science/article/pii/S1553725019301011
+					pedimed_score: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3419206/
+					smoking fagerstrom score: 
+					MET: (NCIT:C89729) https://www.who.int/dietphysicalactivity/physical_activity_intensity/en/#:~:text=Metabolic%20Equivalents%20(METs)%20are%20commonly,of%201kcal%2Fkg%2Fhour.
+					DDD: https://www.who.int/medicines/regulation/medicines-safety/toolkit_atc/en/ 
 }
 
 
 
 
-\\ Sequence files for Individual of this PhenocpaketSet
+// Sequence files for Individual of this EcounterSet (this Subject)
+
 HtsFile {
         CRAM: EGAFXXXXXXXXXXXXX1
         VCF: EGAFXXXXXXXXXXXXX2
@@ -442,7 +453,7 @@ Removed/Changed these non-standard measures:
 	- UBE (= 10 gr ethanol) :https://www.niaaa.nih.gov/
 		%https://www.euskadi.eus/contenidos/informacion/alcohol_consumo_responsable/es_def/adjuntos/CALCULO%20DEL%20CONSUMO%20DE%20ALCOHOL%20Y%20CONCEPTO%20DE%20UNIDAD%20DE%20BEBIDA%20ESTANDAR.pdf
 		
-	- Medical unit codes:	AP, URG (dictionary). Medical Units were removed from now.
+
 
 
 

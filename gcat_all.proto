@@ -1,15 +1,9 @@
 syntax = "proto3";
-package org.matchmakerexchange.api.v1;
+
 
 import "base.proto";
 
 option java_multiple_files = true;
-option java_outer_classname = "GCAT";
-option java_package = "org.gcat.api.v1";
-
-// This is an example of GCAT phenopacket schema definition that reuses Phenopacket schema common elements and defines some custom resource-specific messages to be used across datasets from GCAT project 
-
-
 
 \\\\     \\\\\     \\\\\    \\\\\    \\\\     \\\\\     \\\\\     
 
@@ -79,8 +73,37 @@ message Disease {
 
 
 message Age {
-    // The :ref:`ISO 8601<metadata_date_time>` age of this object as ISO8601
     string age = 1;
+}
+
+
+
+
+message MetaData {
+    google.protobuf.Timestamp created = 1;
+    string created_by = 2;
+    string submitted_by = 3;
+    repeated Resource resources = 4;
+    repeated Update updates = 5;
+    string phenopacket_schema_version = 6;
+    repeated ExternalReference external_references = 7;
+}
+
+
+
+
+message Resource {
+    // for OBO Ontologies, the value of this string MUST always be the official
+    // OBO ID, which is always equivalent to the ID prefix in lower case.
+    // Examples: hp, go, mp, mondo
+    // Consult http://obofoundry.org for a complete list
+    // For other ontologies (e.g. SNOMED), use the prefix in identifiers.org
+    string id = 1;
+    string name = 2;
+    string url = 3;
+    string version = 4;
+    string namespace_prefix = 5;
+    string iri_prefix = 6;
 }
 
 
@@ -95,7 +118,7 @@ message Age {
 \\\\     \\\\\     \\\\\    \\\\\
 
 
-\\ New messages v1.1 used
+\\ New messages v1.1 reused
 
 
 message TimeElement {
@@ -107,6 +130,8 @@ message TimeElement {
     Interval interval = 5;
     }
 }
+
+
 
 message Exposure {
     string description = 1;
@@ -131,6 +156,16 @@ message Exposure {
 
 
 
+
+message MedicalAction {
+    oneof action {
+        PharmaceuticalTreatment pharmaceutical_treatment = 1;
+        Procedure procedure = 2;
+    }
+}
+
+
+
 message PharmaceuticalTreatment {
     OntologyClass drug = 1;
     OntologyClass route_of_administration = 2; 
@@ -138,8 +173,6 @@ message PharmaceuticalTreatment {
     DrugType drug_type = 4;
     \\StopReason stop_reason_id = 5;
 }
-
-
 
 
 
@@ -150,29 +183,6 @@ message DoseInterval {
 
 
 
-message Quantity {
-    OntologyClass unit = 1;
-    double value = 2;
-}
-
-
-
-message MedicalAction {
-    oneof action {
-        PharmaceuticalTreatment pharmaceutical_treatment = 1;
-        Procedure procedure = 2;
-    }
-}
-
-
-message PharmaceuticalTreatment {
-    OntologyClass drug = 1;
-    OntologyClass route_of_administration = 2; 
-    repeated DoseInterval dose_intervals = 3;
-    DrugType drug_type = 4;
-    \\StopReason stop_reason_id = 5;
-}
-
 
 enum DrugType {
     UNKNOWN_DRUG_TYPE = 0;
@@ -180,6 +190,7 @@ enum DrugType {
     EHR_MEDICATION_LIST = 2;
     ADMINISTRATION_RELATED_TO_PROCEDURE = 3;
 }
+
 
 
 message Procedure {
@@ -190,6 +201,13 @@ message Procedure {
 
 
 
+message Quantity {
+    OntologyClass unit = 1;
+    double value = 2;
+}
+
+
+
 
 \\\\     \\\\\     \\\\\    \\\\\
 
@@ -205,7 +223,7 @@ message Procedure {
 
 
 
-\\ Private and modified messages
+\\ Modified messages and custom messages
 
 
 
@@ -222,35 +240,17 @@ message EncountersSet {
 
 
 
-
-message Origin {
-    string type = 1;
-    string code =2;
-    string name = 3;
-}
-
-
-
-
-
-\\Encounter {
- \\   org.phenopackets.schema.v1.core.Phenopacket
-   \\ Age age_at_encounter = 2;
-}
-
-
-
 message Encounter { 
 // after Phenopacket message
     string id = 1;
-    repeated Age age_at_encounter = 2;
+    Age age_at_encounter = 2;
     google.protobuf.Timestamp encounter_time = 3;
     \\TimeElement encounter_time = 4;
-    repeated Finding findings = 5;
-    repeated Diagnose diagnoses = 6;
-    repeated ExposureExtended exposures = 7;
-    repeated org.phenopackets.schema.v1.core.HtsFile hts_files = 8;
-    org.phenopackets.schema.v1.core.MetaData meta_data = 9
+    repeated Finding findings = 4;
+    repeated Diagnose diagnoses = 5;
+    repeated ExposureExtended exposures = 6;
+    repeated org.phenopackets.schema.v1.core.HtsFile hts_files = 7;
+    org.phenopackets.schema.v1.core.MetaData meta_data = 8;
 }
 
 
@@ -264,12 +264,20 @@ message Diagnose {
 
 
 
+message Origin {
+    string type = 1;
+    string code =2;
+    string name = 3;
+}
+
+
+
 
 message Finding {
     one of {
-        repeated ClinicalFinding = 2;
-        repeated ExposureExtended = 3;
-        repeated Measurement = 1;
+        repeated ClinicalFinding = 1;
+        repeated ExposureExtended = 2;
+        repeated Measurement = 3;
         repeated Score = 4;
         repeated Category = 5;
     }
@@ -306,13 +314,14 @@ message Measurement {
 
 message Category {
     string description = 1;
-    OntologyClass type = 1;
-    OntologyClass classification = 2;
+    OntologyClass type = 2;
+    OntologyClass classification = 3;
 }
 
 
 
-message Score { // a type of measurement ?
+message Score { 
+// a type of measurement ?
     string description = 1;
     OntologyClass type = 2;
     double value = 3;
@@ -338,30 +347,5 @@ message ProcedureExt {
 
 /////////////////////////////////////////////////////////
 
-
-
-// OLD
-
-
-
-message ClinicalFinding {
-    //after phenotypicfeature, but with no time, which is in Encounter message
-    string description = 1;
-    OntologyClass type = 2;
-    bool negated = 3;
-    OntologyClass severity = 4;
-    repeated OntologyClass modifiers = 5;
-    repeated Evidence evidence = 6 
-    Origin origin = 7;
-
-}
-
-
-
-message Diagnose {   
-// based on Disease but wo age (which is already in Encounter message and with code of medical unit where diagnose was given) 
-    OntologyClass term = 1;
-    Origin origin = 2;
-}
 
 

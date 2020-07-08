@@ -1,0 +1,176 @@
+\documentclass[a4paper, 10pt]{article}        
+\usepackage[margin=1in]{geometry}
+\usepackage[]{graphicx}
+\usepackage{indentfirst}
+\usepackage[section]{placeins}
+
+
+\usepackage[hyperref]{xcolor}
+\definecolor{teal}{RGB}{0, 128, 128}
+
+
+\usepackage{hyperref, xcolor}
+\hypersetup{
+        colorlinks = true,
+        allcolors={teal}  %teal
+        %linkcolor={teal}
+       %urlcolor=[rgb]{0,128,128},
+     }
+
+\title{Definition schema - GCAT}  
+ 
+ 
+\begin{document}
+\date{}
+\maketitle
+
+
+%\pagenumbering{roman}
+   %  \tableofcontents
+     %\newpage
+     %\pagenumbering{arabic}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+message \colorbox{yellow!80}{EncountersSet} \ {  \\
+    string set\_id = 1;\\
+    string description = 2;\\
+    org.phenopackets.schema.v1.core.Individual subject = 3;\\
+    repeated \colorbox{yellow!80}{Encounter} encounters = 4 \\
+    org.phenopakets.schema.v1.core.MetaData metadata = 5; \\
+\ } \\
+ 
+
+
+
+message \colorbox{yellow!80}{Encounter} \ { \\ 
+    string encounter\_id = 1; \\
+    repeated org.phenopackets.schema.v1.core.Age age\_at\_encounter = 2; \\
+    google.protobuf.Timestamp time\_at\_encounter = 3; \\
+    repeated \colorbox{yellow!80}{Finding} findings = 4; \\
+    repeated \colorbox{yellow!80}{Diagnose} diagnoses = 5; \\
+    repeated \colorbox{yellow!80}{ExposureExtended} exposures = 6; \\
+    repeated org.phenopackets.schema.v1.core.HtsFile hts\_files = 7; \\
+    org.phenopackets.schema.v1.core.MetaData meta\_data = 8 \\
+\ } \\
+
+
+
+
+
+
+
+message \colorbox{yellow!80}{Diagnose} \ { \\   
+    org.phenopackets.schema.v1.core.Disease disease = 1; \\
+    \colorbox{yellow!80}{Origin} origin = 2;
+\ } \\
+
+
+
+
+
+
+message \colorbox{yellow!80}{Findings} \ { \\
+    one of \ { \\
+        repeated \colorbox{yellow!80}{ClinicalFinding} clinical\_findings= 1; \\
+        repeated \colorbox{yellow!80}{ExposureExtended} exposures = 2; \\
+        repeated \colorbox{yellow!80}{Measurement} measurements = 3; \\
+        repeated \colorbox{yellow!80}{Score} scores = 4; \\
+        repeated \colorbox{yellow!80}{Category} categories = 5; \\
+   \ } \\
+\ } \\
+
+
+
+
+
+
+message \colorbox{yellow!80}{Origin} \ { \\
+    string type = 1; \\
+    string code =2; \\
+    string name = 3; \\
+\ } \\
+
+
+
+
+
+message \colorbox{yellow!80}{ClinicalFinding} \ { \\
+    org.phenopackets.schema.v1.core.PhenotypicFeature term = 1; \\
+    \colorbox{yellow!80}{Origin} origin = 2; \\
+\ } \\
+
+
+
+
+message \colorbox{yellow!80}{ExposureExtended} \ { \\
+    org.phenopackets.schema.v1.1.core.Exposure exposure = 1; \\
+    org.phenopackets.schema.v1.1.core.Quantity quantity = 2; \\
+    org.phenopackets.schema.v1.core.OntologyClass frequency = 3; \\
+    org.phenopackets.schema.v1.1.core.TimeElement exposure\_time = 4; \\
+\ } \\
+
+
+
+
+
+message \colorbox{yellow!80}{Measurement} \ {\\
+    string description = 1; \\
+    org.phenopackets.schema.v1.core.OntologyClass parameter = 2; \\
+    org.phenopackets.schema.v1.1.core.Quantity quantity = 3; \\
+    \colorbox{yellow!80}{Origin} origin = 4; \\
+\ } \\
+
+
+
+
+message \colorbox{yellow!80}{Category} \ { \\
+    string description = 1; \\
+    org.phenopackets.schema.v1.core.OntologyClass type = 2; \\
+    org.phenopackets.schema.v1.core.OntologyClass classification = 3; \\
+\ } \\
+
+
+
+
+message \colorbox{yellow!80}{Score} \ { \\
+    string description = 1; \\
+    org.phenopackets.schema.v1.core.OntologyClass type = 2; \\
+    double value = 3; \\
+\ } \\
+
+
+
+
+message \colorbox{yellow!80}{Medication} \ { \\
+    org.phenopackets.schema.v1.1.core.PharmaceuticalTreatment medications = 1; \\
+    org.phenopackets.schema.v1.core.OntologyClass frequency = 2; \\
+\ } \\
+
+
+
+
+message \colorbox{yellow!80}{ProcedureExtended} \ { \\
+    org.phenopackets.schema.v1.1.core.Procedure procedure = 1; \\
+    Origin origin = 2; \\
+\ } \\
+
+
+\end{document}
+
+
+
+
+
+
+
+
+
+
+
+
+

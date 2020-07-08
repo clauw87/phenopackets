@@ -1,11 +1,17 @@
 syntax = "proto3";
-package org.matchmakerexchange.api.v1;
+
+package org.phenopackets.schema.v1.core;
+
+import "google/protobuf/timestamp.proto";
 
 import "base.proto";
 
+
 option java_multiple_files = true;
-option java_outer_classname = "GCAT";
-option java_package = "org.gcat.api.v1";
+option java_package = "org.phenopackets.schema.v1.core";
+
+
+
 
 // This is an example of GCAT phenopacket schema definition that reuses Phenopacket schema common elements and defines some custom resource-specific messages to be used across datasets from GCAT project 
 
@@ -14,12 +20,11 @@ option java_package = "org.gcat.api.v1";
 
 message EncountersSet {  
 // after TimeCourse now deprecated as message in base.proto
-    string id = 1
-    string description = 2
-    org.phenopackets.schema.v1.core.Individual subject = 3
-    //repeated org.phenopackets.schema.v1.core.Phenopacket encounters = 4
-    repeated Encounter encounters = 4
-    org.phenopakets.schema.v1.core.MetaData metadata = 5 
+    string set_id = 1;
+    string description = 2;
+    org.phenopackets.schema.v1.core.Individual subject = 3;
+    repeated Encounter encounters = 4;
+    org.phenopakets.schema.v1.core.MetaData metadata = 5;
 }
  
 
@@ -27,15 +32,15 @@ message EncountersSet {
 
 message Encounter { 
 // after Phenopacket message
-    string id = 1;
-    repeated Age age_at_encounter = 2;
-    google.protobuf.Timestamp encounter_time = 3;
-    \\TimeElement encounter_time = 4;
-    repeated Finding findings = 5;
-    repeated Diagnose diagnoses = 6;
-    repeated ExposureExtended exposures = 7;
-    repeated org.phenopackets.schema.v1.core.HtsFile hts_files = 8;
-    org.phenopackets.schema.v1.core.MetaData meta_data = 9
+    string encounter_id = 1;
+    repeated org.phenopackets.schema.v1.core.Age age_at_encounter = 2;
+    google.protobuf.Timestamp time_at_encounter = 3;
+    \\org.phenopackets.schema.v1.1.core.TimeElement time_at_encounter = 4;
+    repeated Finding findings = 4;
+    repeated Diagnose diagnoses = 5;
+    repeated ExposureExtended exposures = 6;
+    repeated org.phenopackets.schema.v1.core.HtsFile hts_files = 7;
+    org.phenopackets.schema.v1.core.MetaData meta_data = 8;
 }
 
 
@@ -52,13 +57,13 @@ message Diagnose {
 
 
 
-message Finding {
+message Findings {
     one of {
-        repeated ClinicalFinding = 2;
-        repeated ExposureExtended = 3;
-        repeated Measurement = 1;
-        repeated Score = 4;
-        repeated Category = 5;
+        repeated ClinicalFinding clinical_findings= 1;
+        repeated ExposureExtended exposures= 2;
+        repeated Measurement measurements = 3;
+        repeated Score scores = 4;
+        repeated Category categories = 5;
     }
 }
 
@@ -73,7 +78,7 @@ message Origin {
 
 
 message ClinicalFinding {
-    PhenotypicFeature clinical_finding = 1;
+    org.phenopackets.schema.v1.core.PhenotypicFeature term = 1;
     Origin origin = 2;
 }
 
@@ -81,9 +86,9 @@ message ClinicalFinding {
 
 
 message ExposureExtended {
-    Exposure exposure = 1;
-    Quantity quantity = 2;
-    OntologyClass frequency = 3;
+    org.phenopackets.schema.v1.1.core.Exposure exposure = 1;
+    org.phenopackets.schema.v1.1.core.Quantity quantity = 2;
+    org.phenopackets.schema.v1.core.OntologyClass frequency = 3;
     TimeElement exposure_time = 4;
 
 
@@ -93,41 +98,41 @@ message ExposureExtended {
 
 
 message Measurement {
-    OntologyClass type = 1;
-    Quantity quantity = 2;
-    Origin origin = 3;
+    string description = 1;
+    org.phenopackets.schema.v1.core.OntologyClass parameter = 2;
+    org.phenopackets.schema.v1.1.core.Quantity quantity = 3;
+    Origin origin = 4;
 }
 
 
 
 message Category {
     string description = 1;
-    OntologyClass type = 1;
-    OntologyClass classification = 2;
+    org.phenopackets.schema.v1.core.OntologyClass type = 2;
+    org.phenopackets.schema.v1.core.OntologyClass classification = 3;
 }
 
 
 
 message Score { // a type of measurement ?
     string description = 1;
-    OntologyClass type = 2;
+    org.phenopackets.schema.v1.core.OntologyClass type = 2;
     double value = 3;
 }
 
 
 
 message Medication {
-    PharmaceuticalTreatment medications = 1; 
-    OntologyClass frequency = 2;
+    org.phenopackets.schema.v1.1.core.PharmaceuticalTreatment medications = 1; 
+    org.phenopackets.schema.v1.core.OntologyClass frequency = 2;
 }
 
 
 
 message ProcedureExtended {
-    Procedure procedure = 1;
+    org.phenopackets.schema.v1.1.core.Procedure procedure = 1;
     Origin origin = 2;
 }
-
 
 
 

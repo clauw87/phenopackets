@@ -12,7 +12,7 @@
 \usepackage{hyperref, xcolor}
 \hypersetup{
         colorlinks = true,
-        allcolors={magenta}  %teal
+        allcolors={teal}  %teal
         %linkcolor={teal}
        %urlcolor=[rgb]{0,128,128},
      }
@@ -32,20 +32,26 @@
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-This is a description of the exercise of converting the phenotypic data from a dataset from GCAT project to Phenopackets. The resulting proposed phenopacket structure can be found here: \url{https://github.com/clauw87/phenopackets/blob/master/gcat_pheno}
+This is a description of the exercise of converting the phenotypic data from a dataset from GCAT project to Phenopackets. \\
+
+Find here the definition schema \url{https://github.com/clauw87/phenopackets/blob/master/gcat.proto} and one example of phenopackets structure for 1 PhenopacketSet corresponding to 1 subject: \url{https://github.com/clauw87/phenopackets/blob/master/gcat\_pheno}.
 
 
 \section{Description of data}
 
 
-This dataset has the following data:
+The dataset used for this exercise has the following data types:
 \begin{enumerate}
 %\item{Individual Info}
-\item{Lifestyle-Socio/demographic} \textsc{[baseline]}
-\item{Diagnoses} \textsc{[timecourse]}
-\item{Medical Interventions} \textsc{[timecourse]}
- \item{Medications} \textsc{[timecourse]}
- \item{Medical Measures} \textsc{[timecourse]}
+\item{Lifestyle data} \textsc{[baseline]} Data comes from one one-time survey at the beginning of the project and includes diverse metrics of physical activity, diet, smoking and alcohol drinking habits with their time intervals as well as categories and scores based on those metrics such as WHO alcohol behavior category based on gr alcohol consumption, fagerstrom score for smoking and predimed score for mediterranean diet attachment.
+
+\item{Diagnoses} \textsc{[timecourse]} Data comes from EHR and includes diagnostic codes (ICD9 diagnostics)(including diseases and other clinical findings, signs or symptoms), categories of the medical unit (hospital, etc).
+
+\item{Medical Interventions} \textsc{[timecourse]} Data comes from EHR and includes procedure codes (ICD9 procedures) and codes and types, names for the medical unit where procedure as performed
+
+ \item{Medications} \textsc{[timecourse]} Data comes from pharmacy system records and includes codes of drugs (UMLS ATC codes) and diary defined doses.
+ 
+ \item{Medical Measures} \textsc{[timecourse]} Data comes from measures taken in medical setting and includes anthropometric metrics and medical or laboratory measures as well categorical variables and scores based on those such as BMI, or "disease risk score"
 \end{enumerate}
 
 
@@ -56,57 +62,65 @@ This dataset has the following data:
 For this exercise, we used the current version of Phenopacket schema v1.0 \url{https://github.com/phenopackets/phenopacket-schema}, %{https://github.com/phenopackets/phenopacket-schema}
 as well as new messages proposed for v1.1 \url{https://github.com/phenopackets/phenopacket-schema/compare/v1.1}.
 %{https://github.com/phenopackets/phenopacket-schema/compare/v1.1}
+Messages from base.proto v1.0 and new (v.1.1) reused for this exercises as well as the modified and custom messages are here \url{https://github.com/clauw87/phenopackets/blob/master/gcat_all.proto}.
 
+In summary, modifications of base schema for this definition schema included the following: 
 \begin{itemize}
 
-\item Data from each individual was stored as a PhenopacketSet associated to that individual, where each Phenopacket is defined by its date (i.e data is in same phenopacket if they shared date value) 
+\item All timecourse data from each individual was stored as a \textit{EncounterSet} (based on new(now deprecated) message TimeCourse) associated to that individual, where each Encounter (Phenopacket-like) is defined by its date (i.e data is in same Encounter if they shared date value) 
 
-\item One-time point data (survey data) was stored as one Phenopacket with \textit{Date} and \textit{AgeAtEncounter} set at the beginning of the project, if the actual date is not available.
+\item One-time point data (survey data) was stored as one Encounter with date, \textit{time\_at\_encounter}, and individual age, \textit{age\_at\_encounter} at survey time, although the elements referenced there include their own \textit{TimeElement} 
 
-\item Survey lifestyle data on Smoking and Alcohol Drinking and Physical Activity was stored as message \textit{Exposure} with \textit{Evidence} message set as "survey", and including a message \textit{Modifier} to indicate current or past behavior as well as messages \textit{TimeElement\textit} (Age at onset and also Interval for past behaviors), \textit{Quantity} (OntologyClass) and \textit{Frequency} (OntologyClass)
+\item Lifestyle data on Diet, Smoking and Alcohol Drinking and Physical Activity was stored as message \textit{ExposureExtended}, based on new base.proto message \textit{Exposure} including a \textit{modifier} (OntologyClass) to indicate current or past behavior as well as messages \textit{TimeElement\textit} (age\_at\_start and, intervals for past behaviors), a \textit{Quantity} (OntologyClass) and \textit{Frequency} (OntologyClass)
 
-\item Timecourse data (Clinical Findings, Diagnoses, Intervention, Medications) was stored in the Phenopackets as messages \textit{Clinical Findings} (based on base schema PhenotypicFeatures), \textit{Diagnoses} (based on base schema Diseases), and  \textit{Interventions} (based on new message Procedures) and \textit{Medications} (based on new message PharmaceuticalTreatments) within new message MedicalAction.
+\item Timecourse data (Measurements, Findings, Diagnoses, Intervention, Medications) was stored as messages \textit{Clinical Findings} (based on base schema PhenotypicFeatures), \textit{Diagnoses} (based on base schema Diseases), and  \textit{Procedures} (based on new message Procedures) and \textit{Medications} (based on new message PharmaceuticalTreatments within new message \textit{MedicalAction}), adding a new message \textit{Origin} describing the medical units where each of them occurred
  
-
-\end{itemize}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
- \section{Adaptations of messages}
-
-\begin{itemize}
+ \item A \textit{frequency} (ontologyClass) block added to \textit{Dose Interval} within \textit{Medications} in addition to \textit{Quantity} and \textit{Interval} to express medication routines as 50 (value) mg (units) "daily"/"every 8 hours" (frequency) for 2 weeks (interval). This could be later converted/ interoperable through summary doses per week, year, etc.
  
- \item A \textit{Frequency} (ontologyClass) block added in \textit{Dose Interval} within \textit{Medications} in addition to \textit{Quantity} and \textit{Interval} to express medication routines as 50 (value) mg (units) "daily"/"every 8 hours" (frequency) for 2 weeks (interval). This could be later converted/ interoperable through summary doses per week, year, etc.
- 
- \item \textit{Quantity} message and \textit{Frequency} (OntologyClass) were included in \textit{Exposure} message for Lifestyle/ behavior data
+ \item \textit{Quantity} message and \textit{frequency} (OntologyClass) were included in \textit{ExposureExtended} message for Lifestyle/ behavior data
   
-\item New \textit{Measurements} message with \textit{Parameter} (OntologyClass) and \textit{Quantity} used for quantitative measures (anthropometric measures and medical measures)
+\item New message \textit{Measurements}, including \textit{parameter} (OntologyClass) and \textit{Quantity} message was used for quantitative measures (anthropometric measures and medical measures)
  
- 
+\item New messages \textit{Scores} and \textit{Categories}, reusing OntologyClass, were used to describe Findings that are better described as numeric values or categorical values associated to an ontology term than as \textit{PhenotypicFeature} or \textit{Measurements}
 \end{itemize}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
-\section{Metadata}
-Are these standard enough? should we map to some other standards?
+\section{Definition schema}
+
+Here is a pdf version of the gcat.proto messages. Highlighted are the new messages proposed for this exercise. Note, messages now in test are designated as "org.phenopackets.schema.v1.1.core". \\
+
+\url{https://github.com/clauw87/phenopackets/blob/master/gcat\_highlighted.pdf}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Wonderings/Concerns}
 
 \begin{itemize}
+
+\item TimeCourse vs bulk of phenopackets with many TimeElements. Does TimeCourse make sense even if it is not longitudinal design (i.e, encounter times are not in design but different for subjects, medical visits). Alternative would be maybe plain old phenopackets for each encounter adding then the TimeElement of each. Is this structure more efficient/better for later use of data.
+
+\item[-] History of-data. Problem with survey data (hstory of disease, events, lifestyle, exposures) is that TimeElement of the described feature (e.g Exposure) don't math time\_at\_encounter, which is the survey time instead (what is true though is age and length of time intervals and time till survey time if exposure is current). Is there a better way of representing this kind of data?
+
+\item[-] Similarly, though less troublesome, Medical Actions include sometimes an TimeElement interval and not a timepoint. In intervals, only time\_at\_start will match time\_at\_encounter. 
+
+\item Duplicated TimeElements? Should TimeElement be required in the case of Diagnoses, where age and time will match exactly with age and time\_at\_encounter? Would that be better for findability/interoperability across resources?
+
+
+\item Seemingly duplicated info. Should be removed? Data that are derived from some other variable should be kept or removed?, e.g, scores or categories or phenotypic features based on stored measures, modifiers like past behaviors. Duplicated info, in these cases can be good for findability/interoperability with other resources.
+
+\item Metadata. Are these standard enough? should we map to some other standards?
+
 
 \item Units: IS units, non-IS units if necessary can defined in Metadata message?, e.g smoking fagerstrom score, MET
 
-\item Standards ATC for medications, ICD9 for diagnoses, X GCAT codes for Interventions 
+
+\item UMLS ATC codes for medications, ICD9 codes for diagnoses and procedures. Are these standard, interoperable enough? Should we map to more used ontologies? e.g ICD9 codes include diagnostic codes for both diseases and not not diseases (clinical findings, signs), and phenopacket's idea is that Disease message include only diseases while PhenotypicFeature fits the others. To do this, we would need to do some selection or mapping NCIT Diseases or NCIT Clinical Findings, or similar.
+
 
 \end{itemize}
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Concerns}
-\begin{itemize}
 
-\item Past behaviours and similar modifiers, how are they reached if not as modifiers?
-
-\item Problem with survey as a phenopacket is that it has info related to intervals of times in the past,..but it is similar for History of disease or history of treatments..so time of phenopacket doesn't really mean much, but time or age ate every timeelement within phenpackets, only those are comparable.
-
-\end{itemize}
 \end{document}
 
 
