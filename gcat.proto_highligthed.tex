@@ -41,7 +41,9 @@ message \colorbox{yellow!80}{EncountersSet} \ {  \\
     string description = 2;\\
     org.phenopackets.schema.v1.core.Individual subject = 3;\\
     repeated \colorbox{yellow!80}{Encounter} encounters = 4 \\
-    org.phenopakets.schema.v1.core.MetaData metadata = 5; \\
+    repeated org.phenopackets.schema.v1.core.HtsFile hts\_files = 5; \\
+    org.phenopakets.schema.v1.core.MetaData metadata = 6; \\
+
 \ } \\
  
 
