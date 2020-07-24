@@ -131,6 +131,10 @@ message TimeElement {
     }
 }
 
+message Interval {
+    google.protobuf.Timestamp start = 1;
+    google.protobuf.Timestamp end = 2;
+}
 
 
 message Exposure {

@@ -1,0 +1,483 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Beamer Presentation
+% LaTeX Template
+% Version 1.0 (10/11/12)
+%
+% This template has been downloaded from:
+% http://www.LaTeXTemplates.com
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND THEMES
+%----------------------------------------------------------------------------------------
+
+\documentclass{beamer}
+
+\mode<presentation> {
+
+% The Beamer class comes with a number of default slide themes
+% which change the colors and layouts of slides. Below this is a list
+% of all the themes, uncomment each in turn to see what they look like.
+
+%\usetheme{default}
+%\usetheme{AnnArbor}
+%\usetheme{Antibes}
+%\usetheme{Bergen}
+%\usetheme{Berkeley}
+%\usetheme{Berlin}
+\usetheme{Boadilla}
+%\usetheme{CambridgeUS}
+%\usetheme{Copenhagen}
+%\usetheme{Darmstadt}
+%\usetheme{Dresden}
+%\usetheme{Frankfurt}
+%\usetheme{Goettingen}
+%\usetheme{Hannover}
+%\usetheme{Ilmenau}
+%\usetheme{JuanLesPins}
+%\usetheme{Luebeck}
+%\usetheme{Madrid}
+%\usetheme{Malmoe}
+%\usetheme{Marburg}
+%\usetheme{Montpellier}
+%\usetheme{PaloAlto}
+%\usetheme{Pittsburgh} %
+%\usetheme{Rochester}
+%\usetheme{Singapore}
+%\usetheme{Szeged}
+%\usetheme{Warsaw}
+
+% As well as themes, the Beamer class has a number of color themes
+% for any slide theme. Uncomment each of these in turn to see how it
+% changes the colors of your current slide theme.
+
+%\usecolortheme{albatross}
+%\usecolortheme{beaver}
+%\usecolortheme{beetle}
+\usecolortheme{crane}
+%\usecolortheme{dolphin}
+%\usecolortheme{dove}
+%\usecolortheme{fly}
+%\usecolortheme{lily}
+%\usecolortheme{orchid}
+%\usecolortheme{rose}
+%\usecolortheme{seagull}
+%\usecolortheme{seahorse}
+%\usecolortheme{whale}
+%\usecolortheme{wolverine}
+
+%\setbeamertemplate{footline} % To remove the footer line in all slides uncomment this line
+%\setbeamertemplate{footline}[page number] % To replace the footer line in all slides with a simple slide count uncomment this line
+
+%\setbeamertemplate{navigation symbols}{} % To remove the navigation symbols from the bottom of all slides uncomment this line
+}
+
+\usepackage{graphicx} % Allows including images
+\usepackage{booktabs} % Allows the use of \toprule, \midrule and \bottomrule in tables
+
+%----------------------------------------------------------------------------------------
+%	TITLE PAGE
+%----------------------------------------------------------------------------------------
+
+\title[phenopackets exercise]{ 
+Experience using Phenopackets schema for phenotypic data submission of common EGA use cases:\\
+Phenopacket exercise: GCAT example} % The short title appears at the bottom of every slide, the full title is only on the title page
+
+\author{Claudia Vasallo} % Your name
+\institute[EGA-CRG] % Your institution as it will appear on the bottom of every slide, may be shorthand to save space
+{
+European Genome-phenome Archive \\ % Your institution for the title page
+\medskip
+\textit{claudia.vasallo@crg.eu} % Your email address
+}
+\date{\today} % Date, can be changed to a custom date
+
+\begin{document}
+
+\begin{frame}
+\titlepage % Print the title page as the first slide
+\end{frame}
+
+\begin{frame}
+\frametitle{Overview} % Table of contents slide, comment this block out to remove it
+\tableofcontents % Throughout your presentation, if you choose to use \section{} and \subsection{} commands, these will automatically be printed on this slide as an overview of your presentation
+\end{frame}
+
+%----------------------------------------------------------------------------------------
+%	PRESENTATION SLIDES
+%----------------------------------------------------------------------------------------
+
+%------------------------------------------------
+\section{Phenopackets purpose in EGA?} 
+
+\begin{frame}
+\frametitle{Phenopackets purpose in EGA}
+\begin{itemize}
+
+\item[A)] A static substitute for current Metadata Model, with prepackaged definition of use cases (1 or n), allowing better representation and new Sample elements including Individuals, Extended Pedigrees, Measurements, etc $>$ Submissions are aided to be convertible into Phenopackets (e.g. intermediate template (csv, xml, json), web-mediated or programatic submission) \\
+\item[B)] A flexible substitute for current Metadata Model, allowing, in addition to prepackaged objects, some bespoke objects to be submitted (dump for all possible use cases even if meaning of objects cannot be forced and hence they might not be widely interoperable) $>$ Prepackaged  and Customary convertible submissions + any home-made phenopacket accepted without converting to EGA Phenopacket data model(s)
+
+
+\end{itemize}
+\end{frame}
+
+
+%----------------------------------------------------------------
+\begin{frame}
+\frametitle{EGA use cases}
+\begin{itemize}
+
+
+\item 1 genomic file + 1 time point observation
+\item 1 genomic file + n time points/ longitudinal observations
+\item n genomic files (tumors, expression data) + n time point interventions/observations 
+
+
+\end{itemize}
+\end{frame}
+
+%---------------------------------------------------------------------
+\section{GCAT use case} % Sections can be created in order to organize your presentation into discrete blocks, all sections and subsections are automatically printed in the table of contents as an overview of the talk
+%------------------------------------------------
+
+
+\subsection{Use cases, data types} % A subsection can be created just before a set of slides with a common theme to further break down your presentation into chunks
+%------------------------------------------------
+
+\begin{frame}
+\frametitle{Use cases not representable with phenopacket schema v1}
+\begin{itemize}
+
+\item \textbf{Timecourses (longitudinal), many timepoints per individual, extended events}
+\begin{block}{}
+e.g. Treatments, Exposures, Events like hospitalizations
+\end{block}
+\item[$>$] PhenopacketSets or phenopackets bundle with \textit{TimeElements} \\
+
+\item \textbf{Intervals for age at timecourse events}
+\begin{block}{}
+e.g. Exposure occurred between age 41 and 42
+\end{block}
+\item[$>$] Extend Interval message in \textit{TimeElement} to include age at start and at end of Exposure, Treaments etc
+
+\end{itemize}
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Use cases not representable with phenopacket schema v1}
+\begin{itemize}
+
+\item \textbf{Behavior/lifestyle/sociodemographic and other correlate data types}
+\item[$>$] Use \textit{Exposure} mesages
+
+\item \textbf{Quantitative measures} 
+\begin{block}{}
+e.g. Lifestyle (exposures), antropometric, medical, laboratory measures
+\end{block}
+\item[$>$] A new 'Measurement' message based on \textit{Quantity} and \textit{OntologyClass}
+
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Use cases not representable with phenopacket schema v1}
+\begin{itemize}
+
+
+\item \textbf{Non standard units, categories and scores}
+%\item Disease codes vs ontologies
+\begin{block}{}
+e.g. Scores and categories based on quantitative data such as measures or test results
+\end{block}
+\item[$>$] Messages based on \textit{Quantity} and \textit{OntologyClass} 
+
+
+\item \textbf{Other bespoke messages when needed}
+%\item Disease codes vs ontologies
+\begin{block}{}
+e.g. scores and categories based on quantitative data such as measures or test results
+\end{block}
+\item[$>$] Build Flexible blocks?
+
+\end{itemize}
+\end{frame}
+
+%------------------------------------------------
+
+%\begin{frame}
+%\frametitle{Data types not representable with phenopacket schema v1}
+%\begin{block}{Quantitative - Medical Measures}
+%e.g. antropometric, medical, laboratory measures
+%\end{block}
+%\begin{block}{Qualitative - Lifestyle/Sociodemographic, Categories, Scores}
+%e.g. lifestyle/exposures, scores and categories based on measures or test results
+%\end{block}
+%\end{frame}
+
+%------------------------------------------------
+%------------------------------------------------
+\subsection{Definition Schema}
+%------------------------------------------------
+%\subsubsection{Reuse of v1 messages and bespoke messages} % A subsection can be created just before a set of slides with a common theme to further break down your presentation into chunks
+%------------------------------------------------
+
+
+\begin{frame}
+\frametitle{Reuse of v1 messages and bespoke messages}
+
+
+\begin{block}{message EncounterSet - based on \textit{PhenopacketSet}}
+\begin{itemize}
+\item[-] Resuses \textit{Individual}, \textit{Hts.file}, \textit{Metadata} from Phenopackets (avoids repeating this info in every phenopacket)
+\item[-] Includes bespoke messages Encounter similar to \textit{Phenopacket}  
+\end{itemize}
+\end{block}
+
+message \colorbox{yellow!80}{EncountersSet} \ {  \\
+    string set\_id = 1;\\
+    string description = 2;\\
+    org.phenopackets.schema.v1.core.Individual subject = 3;\\
+    repeated \colorbox{yellow!80}{Encounter} encounters = 4 \\
+    repeated org.phenopackets.schema.v1.core.HtsFile hts\_files = 5; \\
+    org.phenopakets.schema.v1.core.MetaData metadata = 6; \\
+
+\ } \\
+
+{\color{blue}* files for Individual when only 1 time, otherwise hts\_files messages in every Encounter? } 
+
+%\begin{figure}
+%\includegraphics[width=0.8\linewidth]{test}
+%\end{figure}
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}
+\frametitle{Reuse of v1 messages and bespoke messages}
+\begin{block}{message Encounter - based on \textit{Phenopacket}}
+\begin{itemize}
+\item[-] Resuses \textit{Individual}, \textit{Hts.file}, \textit{Metadata}   
+\item[-] Includes any number of bespoke messages \textit{Finding}, \textit{Diagnose} and\textit{ExposureExtended} that occurred at a certain date
+\end{itemize}
+\end{block}
+
+message \colorbox{yellow!80}{Encounter} \ { \\ 
+    string encounter\_id = 1; \\
+    repeated org.phenopackets.schema.v1.core.Age age\_at\_encounter = 2; \\
+    google.protobuf.Timestamp time\_at\_encounter = 3; \\
+    repeated \colorbox{yellow!80}{Diagnose} diagnoses = 5; \\
+        repeated \colorbox{yellow!80}{Finding} findings = 4; \\
+   % repeated \colorbox{yellow!80}{ExposureExtended} exposures = 6; \\
+\ } \\
+
+{\color{blue}* 1 date: any disease or findings present (or absent) ongoing at encounter time (disease "Tietze's disease", findings: phenotypic feature "obesity", measurement "weight", clinical finding "Hemorrhage"} 
+
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}
+\frametitle{Reuse of v1 messages and bespoke messages}
+\begin{block}{message Diagnose - based on \textit{Disease}}
+\begin{itemize}
+\item[-] Reuses all Disease, including date, age (duplicated with Encounter Set)
+\item[-] Includes bespoke message Origin for Medical Unit 
+\end{itemize}
+\end{block}
+message \colorbox{yellow!80}{Diagnose} \ { \\   
+    org.phenopackets.schema.v1.core.Disease disease = 1; \\
+    \colorbox{yellow!80}{Origin} origin = 2;\\
+      \colorbox{yellow!80}{Method} origin = 3; \\
+\ } \\
+
+{\color{blue}* diseases only, accompanied by associated origin and method "Tietze's disease" (ontology)} 
+
+
+\end{frame}
+
+
+%------------------------------------------------
+
+\begin{frame}
+\frametitle{Reuse of v1 messages and bespoke messages}
+\begin{block}{message Findings - based on \textit{PhenotypicFeatures, Exposures}}
+\begin{itemize}
+\item[-] Reuses messages, including date, age (duplicated with Encounter Set)
+\item[-] Includes bespoke messages based on \textit{OntologyClass}
+\end{itemize}
+\end{block}
+
+message \colorbox{yellow!80}{Findings} \ { \\
+    one of \ { \\
+        repeated \colorbox{yellow!80}{ClinicalFinding} clinical\_findings= 1; \\
+        repeated \colorbox{yellow!80}{ExposureExtended} exposures = 2; \\
+        repeated \colorbox{yellow!80}{Measurement} measurements = 3; \\
+        repeated \colorbox{yellow!80}{Score} scores = 4; \\
+        repeated \colorbox{yellow!80}{Category} categories = 5; \\
+   \ } \\
+\ } \\
+%\begin{figure}
+%\includegraphics[width=0.8\linewidth]{test}
+%\end{figure}
+\end{frame}
+
+
+
+%------------------------------------------------
+
+\begin{frame}
+\frametitle{Reuse of v1 messages and bespoke messages}
+\begin{block}{message ClinicalFinding - based on \textit{PhenotypicFeature}}
+\begin{itemize}
+\item[-] Reuses all PhenotypicFeature)
+\item[-] Includes bespoke messages Origin for Medical Unit and Method 
+\end{itemize}
+\end{block}
+
+message \colorbox{yellow!80}{ClinicalFinding} \ { \\
+    org.phenopackets.schema.v1.core.PhenotypicFeature term = 1; \\
+    \colorbox{yellow!80}{Origin} origin = 2; \\
+\ } \\
+{\color{blue}* any finding, sign found by clinician, e.g "Hemorrhage"} 
+
+%\begin{figure}
+%\includegraphics[width=0.8\linewidth]{test}
+%\end{figure}
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}
+\frametitle{Reuse of v1 messages and bespoke messages}
+\begin{block}{message ExposureExtended - based on \textit{Exposure}}
+\begin{itemize}
+\item[-] Reuses all Exposure, including date, age (duplicated with Encounter Set), type, severity, evidence
+\item[-] Includes also TimeElement for interval in age at exposure instead of timestamp
+\item[-] Includes also messages Quantity, Frequency
+
+\end{itemize}
+\end{block}
+message \colorbox{yellow!80}{ExposureExtended} \ { \\
+    org.phenopackets.schema.v1.1.core.Exposure exposure = 1; \\
+    org.phenopackets.schema.v1.1.core.Quantity quantity = 2; \\
+    org.phenopackets.schema.v1.core.OntologyClass frequency = 3; \\
+    org.phenopackets.schema.v1.1.core.TimeElement exposure\_time = 4; \\
+\ } \\
+
+{\color{blue}* any exposure either environmental or lifestyle that is present/ accounted for to have occurred at \textit{Encounter} time, e.g. "smoking" (3 packs daily for 3 years), "physical activity" (9 hours weekly), "mediterranean diet"}
+% (-), "alcohol consumption" (230  gr weekly)
+
+%\begin{figure}
+%\includegraphics[width=0.8\linewidth]{test}
+%\end{figure}
+\end{frame}
+
+
+%------------------------------------------------
+\begin{frame}
+\frametitle{Reuse of v1 messages and bespoke messages}
+\begin{block}{message Measurement - based on \textit{OntologyClass} and \textit{Quantity}}
+\begin{itemize} 
+\item[-] Reuses building blocks
+\item[-] Includes bespoke messages Origin for Medical Unit and Method 
+\end{itemize}
+\end{block}
+message \colorbox{yellow!80}{Measurement} \ {\\
+    string description = 1; \\
+    org.phenopackets.schema.v1.core.OntologyClass parameter = 2; \\
+    org.phenopackets.schema.v1.1.core.Quantity quantity = 3; \\
+    \colorbox{yellow!80}{Origin} origin = 4; \\
+     \colorbox{yellow!80}{Method} origin = 5; \\
+\ } \\
+%\begin{figure}
+%\includegraphics[width=0.8\linewidth]{test}
+%\end{figure}
+
+{\color{blue}* any measure that is taken/ accounted for to have occurred at \textit{Encounter} time, e.g. "waist circumference" (77 cm), "systolic blood pressure" (130 mm Hg)} 
+
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}
+\frametitle{Reuse of v1 messages and bespoke messages}
+\begin{block}{message Category - based on \textit{OntologyClass}}
+\begin{itemize} 
+\item[-] Reuses building block 
+\end{itemize}
+\end{block}
+message \colorbox{yellow!80}{Category} \ { \\
+    string description = 1; \\
+    org.phenopackets.schema.v1.core.OntologyClass type = 2; \\
+    org.phenopackets.schema.v1.core.OntologyClass classification = 3; \\
+\ } \\
+
+{\color{blue}* any categorical value that doesn't fit in \textit{PhenotypicFeature} e.g. "obesity" - "class II obesity" (WHO classification associated to BMI), "risk of disease" - "high" (based on parameters not being stored)}
+
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}
+\frametitle{Reuse of v1 messages and bespoke messages}
+\begin{block}{message Score - based on \textit{OntologyClass}}
+\begin{itemize} 
+\item[-] Reuses building block 
+\end{itemize}
+\end{block}
+message \colorbox{yellow!80}{Score} \ { \\
+    string description = 1; \\
+    org.phenopackets.schema.v1.core.OntologyClass type = 2; \\
+    double value = 3; \\
+\ } \\
+
+{\color{blue}* any numerical value that doesn't fit in \textit{Quantity} e.g. "epic score" - 4 (for alcohol consumption behavior)
+
+}
+
+\end{frame}
+
+%------------------------------------------------
+%------------------------------------------------
+%------------------------------------------------
+%------------------------------------------------
+\section{To be discussed}
+
+%------------------------------------------------
+\begin{frame}
+\frametitle{To be discussed: Implementation and Interoperability}
+\begin{itemize}
+\item Phenopackets purpose? - all phenotypic data, computable only, phenome but not epidemiological (e.g sociodemographic or lifestyle correlates)
+\item Meaning of objects. "One of" structure is meant for 1 schema with shared meaning among partners, for EGA we would have to make them compatible
+\item Redundancy, e.g \textit{Score}/ \textit{Category} and other derivatives worth storing? vs \textit{Finding} (redundancy vs interoperability)
+\item Different codings for the same thing: e.g. \textit{PhenotypicFeature} (e.g "Hypertension") quantified as \textit{Category} (severe) vs \textit{Measurement} (Systolic Blood pressure) with \textit{Quantity} (260 mm Hg))
+
+\end{itemize}
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}
+\frametitle{To be discussed: Implementation and Interoperability}
+\begin{itemize}
+
+\item Unknown data, such as \textit{TimeElements} (e.g. past events e.g smoking without known timeframe, family history of disease without pedigree (self-reported))
+\item Non standard units, custom scores (e.g. predicted risk?), or codes such as ICD $>$ codes remapping? define in metadata? store both original and remapped for interoperability?
+\item Interoperability at API level (EGA Beacon, EGA Data Portal): ontology mapper, converters, etc, instead of impossing an input model
+\end{itemize}
+\end{frame}
+
+
+
+
+%------------------------------------------------
+
+%----------------------------------------------------------------------------------------
+
+\end{document} 

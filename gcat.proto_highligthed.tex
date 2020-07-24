@@ -56,8 +56,6 @@ message \colorbox{yellow!80}{Encounter} \ { \\
     repeated \colorbox{yellow!80}{Finding} findings = 4; \\
     repeated \colorbox{yellow!80}{Diagnose} diagnoses = 5; \\
     repeated \colorbox{yellow!80}{ExposureExtended} exposures = 6; \\
-    repeated org.phenopackets.schema.v1.core.HtsFile hts\_files = 7; \\
-    org.phenopackets.schema.v1.core.MetaData meta\_data = 8 \\
 \ } \\
 
 
@@ -69,6 +67,7 @@ message \colorbox{yellow!80}{Encounter} \ { \\
 message \colorbox{yellow!80}{Diagnose} \ { \\   
     org.phenopackets.schema.v1.core.Disease disease = 1; \\
     \colorbox{yellow!80}{Origin} origin = 2;
+     \colorbox{yellow!80}{Method} origin = 3;
 \ } \\
 
 
@@ -92,6 +91,13 @@ message \colorbox{yellow!80}{Findings} \ { \\
 
 
 message \colorbox{yellow!80}{Origin} \ { \\
+    string type = 1; \\
+    string code =2; \\
+    string name = 3; \\
+\ } \\
+
+
+message \colorbox{yellow!80}{Method} \ { \\
     string type = 1; \\
     string code =2; \\
     string name = 3; \\
@@ -125,6 +131,7 @@ message \colorbox{yellow!80}{Measurement} \ {\\
     org.phenopackets.schema.v1.core.OntologyClass parameter = 2; \\
     org.phenopackets.schema.v1.1.core.Quantity quantity = 3; \\
     \colorbox{yellow!80}{Origin} origin = 4; \\
+      \colorbox{yellow!80}{Method} origin = 5; \\
 \ } \\
 
 

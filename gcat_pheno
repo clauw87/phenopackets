@@ -5,7 +5,7 @@
 
 
 EncounterSet {
-// This is a phenopacket set including 4 Encounters (including 1 survey and 3 medical visits and 1 medication record) of 1 subject
+// This is a phenopacket set including 4 Encounters (including 1 survey, history of exposures taken from survey and 3 medical visits and 1 medication record) of 1 subject
 
 	set_id: S0000000000000001
 
@@ -104,7 +104,7 @@ EncounterSet {
 
 	Phenotypic Features:
 
-// derived from measures, but they are mor findble/interoperable this way or should duplicated info be avoided
+// derived from measures, but they are more findable/interoperable this way or should duplicated info be avoided
 			
 			description: obesity 
     		type 
@@ -116,6 +116,16 @@ EncounterSet {
     			label: direct assay evidence //derived measure 
  	
        		
+
+
+
+// One message Encounter at survey time (lasting exposure, ongoning)
+		
+		encounter_id: EGAP0000000006
+
+		//age_at_exposure: // also start and end ages
+				start: NA 
+				end: 41
 
 
 
@@ -136,7 +146,7 @@ EncounterSet {
     			id: NCIT:C67069
     			label: weekly
     	
-    	    description: liftestyle
+    	       	description: liftestyle
     		type:
     			id: NCIT:C118254
     			label: inactivity
@@ -182,7 +192,22 @@ EncounterSet {
     				unit: predimed score
     				value: 8				
     	
-    		description: liftestyle
+    		
+
+
+// One message Encounter at exposure time (lasting exposure, history of)
+		
+		encounter_id: EGAP0000000007
+  		exposure_time:
+  		  	interval: 
+  		  		start: 1991-08-05T00:00:00Z 
+  		  		end: 2004-08-05T00:00:00Z
+		age_at_exposure: // also start and end ages
+				start: 28 
+				end: 41
+
+    Exposures: 
+		description: liftestyle
     		type:
     			label: smoking
     			id: NCIT:C154329 //SCDO:0001079
@@ -204,13 +229,11 @@ EncounterSet {
   		  			label: daily
   		  			id: NCIT:C25473
   		  	quantity: 
-  		  			units: smoking fagerstrom score (FIXME: define in metadata)
-  		  			value: NA
-  		  	exposure_time:
-  		  			interval: 
-  		  					start: 1991-08-05T00:00:00Z 
-  		  					end: 2004-08-05T00:00:00Z
+  		  			units: smoking fagerstrom score   		  			value: NA
+  		
   	
+
+
 
 
 
@@ -238,6 +261,10 @@ EncounterSet {
         		code: 3527
         		name: EAP Tarragona 4 - Llevant
     
+
+
+
+
 
 
 
